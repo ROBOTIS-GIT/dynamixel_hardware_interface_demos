@@ -10,13 +10,12 @@ RUN mkdir -p ${COLCON_WS}/src && \
     cd ${COLCON_WS}/src && \
     git clone -b jazzy https://github.com/ROBOTIS-GIT/dynamixel_hardware_interface.git && \
     git clone -b jazzy https://github.com/ROBOTIS-GIT/dynamixel_interfaces.git && \
-    git clone -b jazzy https://github.com/ROBOTIS-GIT/DynamixelSDK.git && \
-    git clone -b jazzy https://github.com/ROBOTIS-GIT/dynamixel_hardware_interface_demos.git
+    git clone -b jazzy https://github.com/ROBOTIS-GIT/DynamixelSDK.git
 
 RUN cd ${COLCON_WS} && \
     apt-get update && \
     rosdep update && \
-    rosdep install -i --from-path src --rosdistro $ROS_DISTRO --skip-keys="dynamixel_hardware_interface dynamixel_interfaces dynamixel_sdk dynamixel_hardware_interface_demos" -y && \
+    rosdep install -i --from-path src --rosdistro $ROS_DISTRO --skip-keys="dynamixel_hardware_interface dynamixel_interfaces dynamixel_sdk" -y && \
     rm -rf /var/lib/apt/lists/*
 
 RUN bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash && \
