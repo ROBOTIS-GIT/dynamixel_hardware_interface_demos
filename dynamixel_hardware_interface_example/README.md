@@ -48,12 +48,8 @@ This will generate new XACRO files in the `config/` directory.
 After generating the XACRO files, launch the hardware interface and controller manager:
 
 ```bash
-ros2 launch dynamixel_hardware_interface_example hardware.launch.py \
-  description_file:=dynamixel_system.urdf.xacro \
-  prefix:=""
+ros2 launch dynamixel_hardware_interface_example hardware.launch.py
 ```
-- `description_file`: URDF/XACRO file to use (default: `dynamixel_system.urdf.xacro`)
-- `prefix`: Optional prefix for joint names
 
 ## Configuration Files
 - **dynamixel_system.ros2_control.xacro**: Defines the hardware interface and parameters for Dynamixel devices.

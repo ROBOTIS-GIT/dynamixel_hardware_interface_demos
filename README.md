@@ -13,12 +13,55 @@ This repository is intended to help users get started with Dynamixel hardware in
 ## Getting Started
 
 ### Prerequisites
-- ROS 2 (Jazzy or later recommended)
-- Dynamixel hardware (e.g., motors, U2D2, etc.)
-- The `dynamixel_hardware_interface` package and its dependencies
+- **For the recommended Docker environment:**
+  - [Docker Engine installed](https://docs.docker.com/engine/install/)
+  - Dynamixel hardware (e.g., motors, U2D2, etc.)
+- **For local installation (alternative):**
+  - ROS 2 (Jazzy or later recommended)
+  - Dynamixel hardware (e.g., motors, U2D2, etc.)
 
-### Installation
-Clone this repository into your ROS 2 workspace and install dependencies:
+## Docker Development Environment (Recommended)
+
+A ready-to-use Docker environment is provided in the [`docker/`](docker/) directory. This setup allows you to build and run the workspace in a containerized ROS 2 environment, making it easy to get started without installing dependencies directly on your system.
+
+> **Recommended:** Use the Docker environment for the most consistent and reproducible setup.
+
+### Usage
+
+From the root of the repository, use the provided script to build and run the container:
+
+```bash
+./docker/container.sh <command>
+```
+
+#### Available Commands
+- `help`   : Show usage instructions.
+- `start`  :
+  - Sets up X11 forwarding for GUI applications (if `DISPLAY` is set).
+  - Copies the `99-u2d2.rules` file for U2D2 device permissions to `/etc/udev/rules.d/` (requires sudo).
+  - Reloads udev rules.
+  - Pulls the latest Docker images and starts the container using `docker compose`.
+- `enter`  :
+  - Opens an interactive bash shell inside the running container (with X11 forwarding if available).
+- `stop`   :
+  - Prompts for confirmation, then stops and removes the running container using `docker compose down`.
+
+#### Example Usage
+```bash
+./docker/container.sh start   # Start the container
+./docker/container.sh enter   # Enter the running container
+./docker/container.sh stop    # Stop and remove the container
+./docker/container.sh help    # Show help message
+```
+
+**Notes:**
+- X11 forwarding is set up for GUI applications if the `DISPLAY` variable is set.
+- Sudo privileges are required to copy udev rules for U2D2 device support.
+- For advanced options and more details, see comments in [`docker/container.sh`](docker/container.sh).
+
+## Local Installation (Alternative)
+
+If you prefer not to use Docker, you can install and build the workspace locally:
 
 ```bash
 cd <your_ros2_ws>/src
