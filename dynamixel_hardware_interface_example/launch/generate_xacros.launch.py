@@ -50,19 +50,25 @@ def generate_launch_description():
             default_value="/dev/ttyUSB0",
             description="Port name for the Dynamixel device."
         ),
+        DeclareLaunchArgument(
+            "command_interface",
+            default_value="position",
+            description="Command interface type: 'position' or 'effort'."
+        ),
     ]
 
     num_joints = LaunchConfiguration("num_joints")
     output_dir = LaunchConfiguration("output_dir")
     baudrate = LaunchConfiguration("baudrate")
     port_name = LaunchConfiguration("port_name")
+    command_interface = LaunchConfiguration("command_interface")
 
     generate_xacros_node = Node(
         package="dynamixel_hardware_interface_example",
         executable="generate_xacros",
         name="generate_xacros",
         output="screen",
-        arguments=[num_joints, output_dir, baudrate, port_name],
+        arguments=[num_joints, output_dir, baudrate, port_name, command_interface],
     )
 
     return LaunchDescription(declared_arguments + [generate_xacros_node])

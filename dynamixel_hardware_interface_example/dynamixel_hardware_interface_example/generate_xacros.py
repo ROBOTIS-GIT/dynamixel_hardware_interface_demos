@@ -21,7 +21,18 @@ import sys
 import os
 
 # Generate the .ros2_control.xacro file
-def generate_ros2_control_xacro(num_joints, filename, baudrate, port_name):
+def generate_ros2_control_xacro(num_joints, filename, baudrate, port_name, command_interface):
+    # Determine the appropriate interface names based on command_interface
+    if command_interface == "position":
+        joint_command_interface = "position"
+        dxl_command_interface = "Goal Position"
+    elif command_interface == "effort":
+        joint_command_interface = "effort"
+        dxl_command_interface = "Goal Current"
+    else:
+        print(f"Error: Invalid command_interface '{command_interface}'. Must be 'position' or 'effort'.")
+        sys.exit(1)
+
     matrix = ""
     for i in range(num_joints):
         row = ["1" if i == j else "0" for j in range(num_joints)]
@@ -59,7 +70,7 @@ def generate_ros2_control_xacro(num_joints, filename, baudrate, port_name):
         f.write('\n')
         for i in range(1, num_joints+1):
             f.write(f'      <joint name="joint{i}">\n')
-            f.write('        <command_interface name="position"/>\n')
+            f.write(f'        <command_interface name="{joint_command_interface}"/>\n')
             f.write('        <state_interface name="position"/>\n')
             f.write('        <state_interface name="velocity"/>\n')
             f.write('      </joint>\n')
@@ -68,7 +79,7 @@ def generate_ros2_control_xacro(num_joints, filename, baudrate, port_name):
             f.write(f'      <gpio name="dxl{i}">\n')
             f.write('        <param name="type">dxl</param>\n')
             f.write(f'        <param name="ID">{i}</param>\n')
-            f.write('        <command_interface name="Goal Position"/>\n')
+            f.write(f'        <command_interface name="{dxl_command_interface}"/>\n')
             f.write('        <state_interface name="Present Position"/>\n')
             f.write('        <state_interface name="Present Velocity"/>\n')
             f.write('        <param name="Return Delay Time">0</param>\n')
@@ -106,7 +117,7 @@ if __name__ == "__main__":
 
 def main():
     if len(sys.argv) < 2:
-        print("Usage: python generate_dynamixel_xacros.py <number_of_joints> [output_dir] [baudrate] [port_name]")
+        print("Usage: python generate_dynamixel_xacros.py <number_of_joints> [output_dir] [baudrate] [port_name] [command_interface]")
         sys.exit(1)
     try:
         num_joints = int(sys.argv[1])
@@ -116,15 +127,18 @@ def main():
     config_dir = os.path.join(os.path.dirname(__file__), "config")
     baudrate = "4500000"
     port_name = "/dev/ttyUSB0"
+    command_interface = "position"  # Default value
     if len(sys.argv) >= 3:
         config_dir = sys.argv[2]
     if len(sys.argv) >= 4:
         baudrate = sys.argv[3]
     if len(sys.argv) >= 5:
         port_name = sys.argv[4]
+    if len(sys.argv) >= 6:
+        command_interface = sys.argv[5]
     os.makedirs(config_dir, exist_ok=True)
     ros2_control_path = os.path.join(config_dir, "dynamixel_system.ros2_control.xacro")
     urdf_xacro_path = os.path.join(config_dir, "dynamixel_system.urdf.xacro")
-    generate_ros2_control_xacro(num_joints, ros2_control_path, baudrate, port_name)
+    generate_ros2_control_xacro(num_joints, ros2_control_path, baudrate, port_name, command_interface)
     generate_urdf_xacro(num_joints, urdf_xacro_path)
-    print(f"Generated xacro files for {num_joints} joints in {config_dir}. Baudrate: {baudrate}, Port: {port_name}")
+    print(f"Generated xacro files for {num_joints} joints in {config_dir}. Baudrate: {baudrate}, Port: {port_name}, Command Interface: {command_interface}")
