@@ -18,9 +18,7 @@
 
 
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, RegisterEventHandler
-from launch.conditions import IfCondition
-from launch.event_handlers import OnProcessExit
+from launch.actions import DeclareLaunchArgument
 from launch.substitutions import Command, FindExecutable, LaunchConfiguration, PathJoinSubstitution
 
 from launch_ros.actions import Node
@@ -33,66 +31,70 @@ def generate_launch_description():
 
     declared_arguments.append(
         DeclareLaunchArgument(
-            "prefix",
+            'prefix',
             default_value='""',
-            description="Prefix of the joint names"
+            description='Prefix of the joint names'
         )
     )
 
     declared_arguments.append(
         DeclareLaunchArgument(
-            "description_file",
-            default_value="dynamixel_system.urdf.xacro",
-            description="URDF/XACRO description file with the robot.",
+            'description_file',
+            default_value='dynamixel_system.urdf.xacro',
+            description='URDF/XACRO description file with the robot.',
         )
     )
 
-    description_file = LaunchConfiguration("description_file")
-    prefix = LaunchConfiguration("prefix")
+    description_file = LaunchConfiguration('description_file')
+    prefix = LaunchConfiguration('prefix')
 
     robot_controllers = PathJoinSubstitution(
         [
-            FindPackageShare("dynamixel_hardware_interface_example"),
-            "config",
-            "ros2_controllers.yaml",
+            FindPackageShare('dynamixel_hardware_interface_example'),
+            'config',
+            'ros2_controllers.yaml',
         ]
     )
 
     control_node = Node(
-        package="controller_manager",
-        executable="ros2_control_node",
+        package='controller_manager',
+        executable='ros2_control_node',
         parameters=[robot_controllers],
-        output="both",
+        output='both',
     )
 
     robot_description_content = Command(
         [
-            PathJoinSubstitution([FindExecutable(name="xacro")]),
-            " ",
+            PathJoinSubstitution([FindExecutable(name='xacro')]),
+            ' ',
             PathJoinSubstitution(
-                [FindPackageShare("dynamixel_hardware_interface_example"), "config", description_file]
+                [
+                    FindPackageShare('dynamixel_hardware_interface_example'),
+                    'config',
+                    description_file,
+                ]
             ),
-            " ",
-            "prefix:=",
+            ' ',
+            'prefix:=',
             prefix,
         ]
     )
 
-    robot_description = {"robot_description": robot_description_content}
+    robot_description = {'robot_description': robot_description_content}
 
     robot_controller_spawner = Node(
-        package="controller_manager",
-        executable="spawner",
+        package='controller_manager',
+        executable='spawner',
         arguments=[
-            "joint_state_broadcaster",
+            'joint_state_broadcaster',
         ],
         parameters=[robot_description],
     )
 
     robot_state_publisher_node = Node(
-        package="robot_state_publisher",
-        executable="robot_state_publisher",
-        output="both",
+        package='robot_state_publisher',
+        executable='robot_state_publisher',
+        output='both',
         parameters=[robot_description],
     )
 

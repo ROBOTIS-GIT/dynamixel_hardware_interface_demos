@@ -17,57 +17,58 @@
 # Author: Woojin Wie
 
 
+import os
+
+from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
-from ament_index_python.packages import get_package_share_directory
-import os
 
 
 def generate_launch_description():
     declared_arguments = [
         DeclareLaunchArgument(
-            "num_joints",
-            default_value="1",
-            description="Number of joints to generate in the xacro files."
+            'num_joints',
+            default_value='1',
+            description='Number of joints to generate in the xacro files.'
         ),
         DeclareLaunchArgument(
-            "output_dir",
+            'output_dir',
             default_value=os.path.join(
                 get_package_share_directory('dynamixel_hardware_interface_example'),
                 'config'
             ),
-            description="Directory to save generated xacro files."
+            description='Directory to save generated xacro files.'
         ),
         DeclareLaunchArgument(
-            "baudrate",
-            default_value="4000000",
-            description="Baudrate for the Dynamixel port."
+            'baudrate',
+            default_value='4000000',
+            description='Baudrate for the Dynamixel port.'
         ),
         DeclareLaunchArgument(
-            "port_name",
-            default_value="/dev/ttyUSB0",
-            description="Port name for the Dynamixel device."
+            'port_name',
+            default_value='/dev/ttyUSB0',
+            description='Port name for the Dynamixel device.'
         ),
         DeclareLaunchArgument(
-            "command_interface",
-            default_value="position",
+            'command_interface',
+            default_value='position',
             description="Command interface type: 'position' or 'effort'."
         ),
     ]
 
-    num_joints = LaunchConfiguration("num_joints")
-    output_dir = LaunchConfiguration("output_dir")
-    baudrate = LaunchConfiguration("baudrate")
-    port_name = LaunchConfiguration("port_name")
-    command_interface = LaunchConfiguration("command_interface")
+    num_joints = LaunchConfiguration('num_joints')
+    output_dir = LaunchConfiguration('output_dir')
+    baudrate = LaunchConfiguration('baudrate')
+    port_name = LaunchConfiguration('port_name')
+    command_interface = LaunchConfiguration('command_interface')
 
     generate_xacros_node = Node(
-        package="dynamixel_hardware_interface_example",
-        executable="generate_xacros",
-        name="generate_xacros",
-        output="screen",
+        package='dynamixel_hardware_interface_example',
+        executable='generate_xacros',
+        name='generate_xacros',
+        output='screen',
         arguments=[num_joints, output_dir, baudrate, port_name, command_interface],
     )
 
