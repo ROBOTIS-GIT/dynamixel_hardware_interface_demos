@@ -4,7 +4,7 @@
   <name>dynamixel_hardware_interface_demos</name>
   <version>0.0.1</version>
   <description>
-    Dynamixel Hardware Interface Demos ROS 2 package.
+    Dynamixel Hardware Interface Demos meta ROS 2 package.
   </description>
   <maintainer email="pyo@robotis.com">Pyo</maintainer>
   <license>Apache 2.0</license>
