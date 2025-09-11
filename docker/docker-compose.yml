@@ -1,7 +1,7 @@
 services:
   dynamixel_hardware_interface_demos:
     container_name: dynamixel_hardware_interface_demos
-    image: robotis/dynamixel_hardware_interface_demos:latest
+    image: robotis/dynamixel-hardware-interface-demos:latest
     build:
       context: .
       dockerfile: Dockerfile
