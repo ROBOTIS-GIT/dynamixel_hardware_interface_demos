@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
-  <xacro:macro name="dynamixel_system_ros2_control" params="name port_name baud_rate">
-    <ros2_control name="${name}" type="system">
+  <xacro:macro name="dynamixel_system_ros2_control_2" params="name port_name baud_rate">
+    <ros2_control name="${name}" type="system" is_async="true">
       <hardware>
         <plugin>dynamixel_hardware_interface/DynamixelHardware</plugin>
         <param name="port_name">${port_name}</param>
@@ -24,15 +24,15 @@
         <param name="set_dxl_torque_srv_name">dynamixel_hardware_interface/set_dxl_torque</param>
       </hardware>
 
-      <joint name="joint1">
+      <joint name="joint2">
         <command_interface name="position"/>
         <state_interface name="position"/>
         <state_interface name="velocity"/>
       </joint>
 
-      <gpio name="dxl1">
+      <gpio name="dxl2">
         <param name="type">dxl</param>
-        <param name="ID">1</param>
+        <param name="ID">2</param>
         <command_interface name="Goal Position"/>
         <state_interface name="Present Position"/>
         <state_interface name="Present Velocity"/>
