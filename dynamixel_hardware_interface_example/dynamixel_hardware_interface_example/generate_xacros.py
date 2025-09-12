@@ -48,7 +48,8 @@ def generate_ros2_control_xacro(num_joints, filename, baudrate, port_name, comma
         f.write('<?xml version="1.0"?>\n')
         f.write('<robot xmlns:xacro="http://www.ros.org/wiki/xacro">\n')
         # Reflect new macro signature to accept port_name and baud_rate as parameters
-        f.write('  <xacro:macro name="dynamixel_system_ros2_control" params="name port_name baud_rate">\n')
+        f.write('  <xacro:macro name="dynamixel_system_ros2_control"'
+                ' params="name port_name baud_rate">\n')
         f.write('    <ros2_control name="${name}" type="system">\n')
         f.write('      <hardware>\n')
         f.write('        <plugin>dynamixel_hardware_interface/DynamixelHardware</plugin>\n')
@@ -111,7 +112,8 @@ def generate_urdf_xacro(num_joints, filename, baudrate, port_name):
         f.write('  <xacro:include filename="dynamixel_system.ros2_control.xacro" />\n')
         f.write('\n')
         # Pass through xacro args to macro
-        f.write('  <xacro:dynamixel_system_ros2_control name="dynamixel_system" port_name="$(arg port_name)" baud_rate="$(arg baud_rate)"/>\n')
+        f.write('  <xacro:dynamixel_system_ros2_control name="dynamixel_system"'
+                ' port_name="$(arg port_name)" baud_rate="$(arg baud_rate)"/>\n')
         f.write('\n')
         f.write('  <link name="$(arg prefix)base_link"/>\n')
         f.write('\n')
