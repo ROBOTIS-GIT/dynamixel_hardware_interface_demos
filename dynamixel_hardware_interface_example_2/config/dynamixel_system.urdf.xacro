@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="dynamixel_system">
+  <xacro:arg name="prefix" default="" />
+  <xacro:include filename="dynamixel_system.ros2_control.xacro" />
+
+  <xacro:dynamixel_system_ros2_control name="dynamixel_system"/>
+
+  <link name="$(arg prefix)base_link"/>
+
+  <joint name="$(arg prefix)pedal_joint" type="revolute">
+    <parent link="$(arg prefix)base_link"/>
+    <child link="$(arg prefix)pedal_link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <axis xyz="1 0 0" />
+    <limit velocity="4.8" effort="1" lower="${-pi*100.0}" upper="${pi*100.0}" />
+  </joint>
+  <link name="$(arg prefix)pedal_link"/>
+</robot>
