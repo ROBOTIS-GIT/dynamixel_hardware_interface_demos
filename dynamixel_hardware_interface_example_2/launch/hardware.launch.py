@@ -126,6 +126,7 @@ def generate_launch_description():
         remappings=[
             ('position_controller/commands', 'position_controller/commands'),
             ('joint_states', 'joint_states'),
+            ('pedal_state', '/vr_control/toggle'),
         ],
     )
 

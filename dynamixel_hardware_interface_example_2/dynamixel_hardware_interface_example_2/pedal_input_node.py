@@ -6,7 +6,7 @@ import rclpy
 from rclpy.node import Node
 from rclpy.duration import Duration
 
-from std_msgs.msg import Float64MultiArray, Int32
+from std_msgs.msg import Float64MultiArray, Bool
 from sensor_msgs.msg import JointState
 
 
@@ -33,7 +33,7 @@ class PedalInputNode(Node):
         # Commands publisher (remap '~/commands' to the controller input topic in launch)
         self.commands_pub = self.create_publisher(Float64MultiArray, 'position_controller/commands', 10)
         # Pedal state publisher: 0 or 1
-        self.state_pub = self.create_publisher(Int32, 'pedal_state', 10)
+        self.state_pub = self.create_publisher(Bool, 'pedal_state', 10)
 
         # Subscriber
         self.joint_states_sub = self.create_subscription(JointState, 'joint_states', self._on_joint_states, 10)
@@ -43,7 +43,7 @@ class PedalInputNode(Node):
         self.command_timer = self.create_timer(period, self._publish_command)
 
         # Press/toggle state
-        self.current_state: int = 0  # 0 or 1
+        self.current_state = False  # 0 or 1
         self.pressed_start_time: Optional[rclpy.time.Time] = None
         self.toggle_done_for_current_press: bool = False
 
@@ -57,8 +57,8 @@ class PedalInputNode(Node):
         self.commands_pub.publish(msg)
 
     def _publish_state(self) -> None:
-        state_msg = Int32()
-        state_msg.data = int(self.current_state)
+        state_msg = Bool()
+        state_msg.data = self.current_state
         self.state_pub.publish(state_msg)
 
     def _is_pressed(self, position_value: float) -> bool:
@@ -86,7 +86,7 @@ class PedalInputNode(Node):
                 held_duration = now - self.pressed_start_time
                 if held_duration >= Duration(seconds=self.long_press_seconds):
                     # Toggle state once per press-and-hold
-                    self.current_state = 0 if self.current_state == 1 else 1
+                    self.current_state = False if self.current_state == True else True
                     self._publish_state()
                     self.toggle_done_for_current_press = True
         else:
