@@ -47,16 +47,20 @@ def generate_ros2_control_xacro(num_joints, filename, baudrate, port_name, comma
     with open(filename, 'w') as f:
         f.write('<?xml version="1.0"?>\n')
         f.write('<robot xmlns:xacro="http://www.ros.org/wiki/xacro">\n')
-        f.write('  <xacro:macro name="dynamixel_system_ros2_control" params="name">\n')
+        # Reflect new macro signature to accept port_name and baud_rate as parameters
+        f.write('  <xacro:macro name="dynamixel_system_ros2_control"'
+                ' params="name port_name baud_rate">\n')
         f.write('    <ros2_control name="${name}" type="system">\n')
         f.write('      <hardware>\n')
         f.write('        <plugin>dynamixel_hardware_interface/DynamixelHardware</plugin>\n')
-        f.write(f'        <param name="port_name">{port_name}</param>\n')
-        f.write(f'        <param name="baud_rate">{baudrate}</param>\n')
+        # Use xacro parameters inside the macro body, not baked-in constants
+        f.write('        <param name="port_name">${port_name}</param>\n')
+        f.write('        <param name="baud_rate">${baud_rate}</param>\n')
         f.write('        <param name="dynamixel_model_folder">/param/dxl_model</param>\n')
         f.write(f'        <param name="number_of_joints">{num_joints}</param>\n')
         f.write(f'        <param name="number_of_transmissions">{num_joints}</param>\n')
         f.write('        <param name="disable_torque_at_init">true</param>\n')
+        f.write('        <param name="error_timeout_ms">1000</param>\n')
         f.write('        <param name="transmission_to_joint_matrix">\n')
         f.write(matrix)
         f.write('        </param>\n')
@@ -97,14 +101,19 @@ def generate_ros2_control_xacro(num_joints, filename, baudrate, port_name, comma
 
 
 # Generate the .urdf.xacro file
-def generate_urdf_xacro(num_joints, filename):
+def generate_urdf_xacro(num_joints, filename, baudrate, port_name):
     with open(filename, 'w') as f:
         f.write('<?xml version="1.0"?>\n')
         f.write('<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="dynamixel_system">\n')
         f.write('  <xacro:arg name="prefix" default="" />\n')
+        # Provide xacro args for baud_rate and port_name with defaults from CLI
+        f.write(f'  <xacro:arg name="baud_rate" default="{baudrate}" />\n')
+        f.write(f'  <xacro:arg name="port_name" default="{port_name}" />\n')
         f.write('  <xacro:include filename="dynamixel_system.ros2_control.xacro" />\n')
         f.write('\n')
-        f.write('  <xacro:dynamixel_system_ros2_control name="dynamixel_system"/>\n')
+        # Pass through xacro args to macro
+        f.write('  <xacro:dynamixel_system_ros2_control name="dynamixel_system"'
+                ' port_name="$(arg port_name)" baud_rate="$(arg baud_rate)"/>\n')
         f.write('\n')
         f.write('  <link name="$(arg prefix)base_link"/>\n')
         f.write('\n')
@@ -133,7 +142,7 @@ def main():
         print('First argument must be an integer (number of joints)')
         sys.exit(1)
     config_dir = os.path.join(os.path.dirname(__file__), 'config')
-    baudrate = '4500000'
+    baudrate = '4000000'
     port_name = '/dev/ttyUSB0'
     command_interface = 'position'  # Default value
     if len(sys.argv) >= 3:
@@ -149,7 +158,7 @@ def main():
     urdf_xacro_path = os.path.join(config_dir, 'dynamixel_system.urdf.xacro')
     generate_ros2_control_xacro(num_joints, ros2_control_path, baudrate,
                                 port_name, command_interface)
-    generate_urdf_xacro(num_joints, urdf_xacro_path)
+    generate_urdf_xacro(num_joints, urdf_xacro_path, baudrate, port_name)
     print(f'Generated xacro files for {num_joints} joints in {config_dir}. '
           f'Baudrate: {baudrate}, Port: {port_name}, Command Interface: {command_interface}')
 

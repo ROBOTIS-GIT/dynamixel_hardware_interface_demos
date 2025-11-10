@@ -40,35 +40,53 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             'description_file',
-            default_value='dynamixel_system.urdf.xacro',
+            default_value='dynamixel_dual_system.urdf.xacro',
             description='URDF/XACRO description file with the robot.',
         )
     )
 
     declared_arguments.append(
         DeclareLaunchArgument(
-            'port_name',
+            'port_name_1',
             default_value='/dev/ttyUSB0',
-            description='Port name for the Dynamixel device.',
+            description='Port name for the first Dynamixel device.'
         )
     )
 
     declared_arguments.append(
         DeclareLaunchArgument(
-            'baud_rate',
+            'port_name_2',
+            default_value='/dev/ttyUSB1',
+            description='Port name for the second Dynamixel device.'
+        )
+    )
+
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            'baud_rate_1',
             default_value='4000000',
-            description='Baudrate for the Dynamixel port.',
+            description='Baudrate for the first Dynamixel port.'
+        )
+    )
+
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            'baud_rate_2',
+            default_value='4000000',
+            description='Baudrate for the second Dynamixel port.'
         )
     )
 
     description_file = LaunchConfiguration('description_file')
     prefix = LaunchConfiguration('prefix')
-    port_name = LaunchConfiguration('port_name')
-    baud_rate = LaunchConfiguration('baud_rate')
+    port_name_1 = LaunchConfiguration('port_name_1')
+    port_name_2 = LaunchConfiguration('port_name_2')
+    baud_rate_1 = LaunchConfiguration('baud_rate_1')
+    baud_rate_2 = LaunchConfiguration('baud_rate_2')
 
     robot_controllers = PathJoinSubstitution(
         [
-            FindPackageShare('dynamixel_hardware_interface_example'),
+            FindPackageShare('dynamixel_hardware_interface_example_1'),
             'config',
             'ros2_controllers.yaml',
         ]
@@ -87,7 +105,7 @@ def generate_launch_description():
             ' ',
             PathJoinSubstitution(
                 [
-                    FindPackageShare('dynamixel_hardware_interface_example'),
+                    FindPackageShare('dynamixel_hardware_interface_example_1'),
                     'config',
                     description_file,
                 ]
@@ -96,11 +114,17 @@ def generate_launch_description():
             'prefix:=',
             prefix,
             ' ',
-            'port_name:=',
-            port_name,
+            'port_name_1:=',
+            port_name_1,
             ' ',
-            'baud_rate:=',
-            baud_rate,
+            'port_name_2:=',
+            port_name_2,
+            ' ',
+            'baud_rate_1:=',
+            baud_rate_1,
+            ' ',
+            'baud_rate_2:=',
+            baud_rate_2,
         ]
     )
 
