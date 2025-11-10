@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>dynamixel_hardware_interface_example</name>
+  <name>dynamixel_hardware_interface_example_1</name>
   <version>0.0.3</version>
   <description>
-    Example package with configuration and launch files for using the dynamixel_hardware_interface.
+    Example package demonstrating two ros2_control interfaces using the dynamixel_hardware_interface.
   </description>
   <maintainer email="pyo@robotis.com">Pyo</maintainer>
   <license>Apache 2.0</license>

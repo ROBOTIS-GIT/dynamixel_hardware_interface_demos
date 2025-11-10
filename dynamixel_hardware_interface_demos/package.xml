@@ -2,7 +2,7 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>dynamixel_hardware_interface_demos</name>
-  <version>0.0.1</version>
+  <version>0.0.3</version>
   <description>
     Dynamixel Hardware Interface Demos meta ROS 2 package.
   </description>
@@ -14,6 +14,7 @@
   <author email="wwj@robotis.com">Woojin Wie</author>
   <buildtool_depend>ament_cmake</buildtool_depend>
   <exec_depend>dynamixel_hardware_interface_example</exec_depend>
+  <exec_depend>dynamixel_hardware_interface_example_1</exec_depend>
   <export>
     <build_type>ament_cmake</build_type>
   </export>

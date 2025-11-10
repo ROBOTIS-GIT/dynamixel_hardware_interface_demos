@@ -9,6 +9,8 @@ This repository is intended to help users get started with Dynamixel hardware in
 
 - [dynamixel_hardware_interface_example](dynamixel_hardware_interface_example/README.md)
   - Example package with configuration files, launch files, and scripts for setting up and running a Dynamixel-based robot system using ros2_control.
+- [dynamixel_hardware_interface_example_1](dynamixel_hardware_interface_example_1/README.md)
+  - Example package demonstrating a dual Dynamixel system (two buses) with separate ros2_control configurations and a dedicated launch file for running both systems together.
 
 ## Getting Started
 

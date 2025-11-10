@@ -75,3 +75,4 @@ jobs:
           package-name: |
             dynamixel_hardware_interface_demos
             dynamixel_hardware_interface_example
+            dynamixel_hardware_interface_example_1
