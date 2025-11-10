@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="dynamixel_dual_system">
+  <xacro:arg name="prefix" default="" />
+  <xacro:arg name="baud_rate_1" default="4000000" />
+  <xacro:arg name="baud_rate_2" default="4000000" />
+  <xacro:arg name="port_name_1" default="/dev/ttyUSB0" />
+  <xacro:arg name="port_name_2" default="/dev/ttyUSB1" />
+
+  <xacro:include filename="dynamixel_system_1.ros2_control.xacro" />
+  <xacro:include filename="dynamixel_system_2.ros2_control.xacro" />
+
+  <xacro:dynamixel_system_ros2_control_1 name="dynamixel_system_1" port_name="$(arg port_name_1)" baud_rate="$(arg baud_rate_1)"/>
+  <xacro:dynamixel_system_ros2_control_2 name="dynamixel_system_2" port_name="$(arg port_name_2)" baud_rate="$(arg baud_rate_2)"/>
+
+  <link name="$(arg prefix)base_link"/>
+
+  <joint name="$(arg prefix)joint1" type="revolute">
+    <parent link="$(arg prefix)base_link"/>
+    <child link="$(arg prefix)link1"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <axis xyz="1 0 0" />
+    <limit velocity="4.8" effort="1" lower="${-pi*100.0}" upper="${pi*100.0}" />
+  </joint>
+  <link name="$(arg prefix)link1"/>
+
+  <joint name="$(arg prefix)joint2" type="revolute">
+    <parent link="$(arg prefix)link1"/>
+    <child link="$(arg prefix)link2"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <axis xyz="1 0 0" />
+    <limit velocity="4.8" effort="1" lower="${-pi*100.0}" upper="${pi*100.0}" />
+  </joint>
+  <link name="$(arg prefix)link2"/>
+</robot>

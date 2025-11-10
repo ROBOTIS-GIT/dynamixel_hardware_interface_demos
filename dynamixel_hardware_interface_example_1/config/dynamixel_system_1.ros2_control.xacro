@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
-  <xacro:macro name="dynamixel_system_ros2_control" params="name port_name baud_rate">
-    <ros2_control name="${name}" type="system">
+  <xacro:macro name="dynamixel_system_ros2_control_1" params="name port_name baud_rate">
+    <ros2_control name="${name}" type="system" is_async="true">
       <hardware>
         <plugin>dynamixel_hardware_interface/DynamixelHardware</plugin>
         <param name="port_name">${port_name}</param>

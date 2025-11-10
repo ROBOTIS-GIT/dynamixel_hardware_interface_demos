@@ -4,7 +4,7 @@ import os
 from setuptools import find_packages
 from setuptools import setup
 
-package_name = 'dynamixel_hardware_interface_example'
+package_name = 'dynamixel_hardware_interface_example_1'
 
 setup(
     name=package_name,
@@ -20,12 +20,10 @@ setup(
     zip_safe=True,
     maintainer='Pyo',
     maintainer_email='pyo@robotis.com',
-    description='Dynamixel Hardware Interface Example ROS 2 package.',
+    description='Dynamixel Hardware Interface Example (dual ros2_control) ROS 2 package.',
     license='Apache 2.0',
     tests_require=['pytest'],
     entry_points={
-        'console_scripts': [
-            'generate_xacros = dynamixel_hardware_interface_example.generate_xacros:main',
-        ],
+        'console_scripts': [],
     },
 )
