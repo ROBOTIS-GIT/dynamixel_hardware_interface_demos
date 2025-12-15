@@ -2,6 +2,10 @@
 Changelog for package dynamixel_hardware_interface_example
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.0.4 (2025-12-15)
+------------------
+* None
+
 0.0.3 (2025-09-12)
 ------------------
 * Introduced xacro arguments for port_name and baud_rate
