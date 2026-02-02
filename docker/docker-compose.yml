@@ -3,8 +3,8 @@ services:
     container_name: dynamixel_hardware_interface_demos
     image: robotis/dynamixel-hardware-interface-demos:latest
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ..
+      dockerfile: docker/Dockerfile
     tty: true
     restart: always
     cap_add:

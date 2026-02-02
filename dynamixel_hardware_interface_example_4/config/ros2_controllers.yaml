@@ -1,0 +1,24 @@
+/**:
+  controller_manager:
+    ros__parameters:
+      update_rate: 100  # Hz
+
+      joint_state_broadcaster:
+        type: joint_state_broadcaster/JointStateBroadcaster
+
+      trigger_position_controller:
+        type: position_controllers/JointGroupPositionController
+
+      gripper_position_controller:
+        type: position_controllers/JointGroupPositionController
+
+/**:
+  trigger_position_controller:
+    ros__parameters:
+      joints:
+        - trigger_joint
+
+  gripper_position_controller:
+    ros__parameters:
+      joints:
+        - gripper_joint
