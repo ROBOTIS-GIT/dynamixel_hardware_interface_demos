@@ -18,16 +18,24 @@
 
 
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument
+from launch.actions import DeclareLaunchArgument, GroupAction
 from launch.substitutions import Command, FindExecutable, LaunchConfiguration, PathJoinSubstitution
 
-from launch_ros.actions import Node
+from launch_ros.actions import Node, PushRosNamespace
 from launch_ros.substitutions import FindPackageShare
 
 
 def generate_launch_description():
     # Declare arguments
     declared_arguments = []
+
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            'namespace',
+            default_value='umi',
+            description='Namespace for all nodes to avoid topic conflicts'
+        )
+    )
 
     declared_arguments.append(
         DeclareLaunchArgument(
@@ -77,6 +85,7 @@ def generate_launch_description():
         )
     )
 
+    namespace = LaunchConfiguration('namespace')
     description_file = LaunchConfiguration('description_file')
     prefix = LaunchConfiguration('prefix')
     port_name_1 = LaunchConfiguration('port_name_1')
@@ -154,11 +163,14 @@ def generate_launch_description():
         parameters=[robot_description],
     )
 
-    nodes = [
-        control_node,
-        robot_controller_spawner,
-        trigger_to_gripper_remap_node,
-        robot_state_publisher_node,
-    ]
+    namespaced_nodes = GroupAction(
+        actions=[
+            PushRosNamespace(namespace),
+            control_node,
+            robot_controller_spawner,
+            trigger_to_gripper_remap_node,
+            robot_state_publisher_node,
+        ]
+    )
 
-    return LaunchDescription(declared_arguments + nodes)
+    return LaunchDescription(declared_arguments + [namespaced_nodes])
