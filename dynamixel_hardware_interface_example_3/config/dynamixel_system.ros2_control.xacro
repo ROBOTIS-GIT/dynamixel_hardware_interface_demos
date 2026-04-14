@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <!-- OpenRB-150 ELRS (CRSF) — OPENRB_CRSF.xml / openrb_elrs.model (6031) -->
   <xacro:macro name="dynamixel_system_ros2_control" params="name port_name baud_rate">
     <ros2_control name="${name}" type="system">
       <hardware>
@@ -18,7 +19,7 @@
         <param name="set_dxl_torque_srv_name">dynamixel_hardware_interface/set_dxl_torque</param>
       </hardware>
 
-      <sensor name="openrb_rc">
+      <sensor name="openrb_elrs">
         <state_interface name="CH1"/>
         <state_interface name="CH2"/>
         <state_interface name="CH3"/>
@@ -35,16 +36,16 @@
         <state_interface name="CH14"/>
         <state_interface name="CH15"/>
         <state_interface name="CH16"/>
-        <state_interface name="CH17"/>
-        <state_interface name="CH18"/>
-        <state_interface name="iBUS Checksum Fails"/>
-        <state_interface name="iBUS Last Frame Age"/>
-        <state_interface name="iBUS Failsafe"/>
-        <state_interface name="iBUS RSSI (raw)"/>
-        <state_interface name="iBUS TX Failsafe"/>
+        <state_interface name="CRSF Frame Count"/>
+        <state_interface name="CRSF CRC Fails"/>
+        <state_interface name="CRSF Last Frame (ms)"/>
+        <state_interface name="CRSF Failsafe"/>
+        <state_interface name="CRSF RSSI"/>
+        <state_interface name="CRSF Link Quality"/>
+        <state_interface name="CRSF SNR"/>
       </sensor>
 
-      <gpio name="openrb_rc">
+      <gpio name="openrb_elrs">
         <param name="type">sensor</param>
         <param name="ID">1</param>
         <state_interface name="CH1"/>
@@ -63,13 +64,13 @@
         <state_interface name="CH14"/>
         <state_interface name="CH15"/>
         <state_interface name="CH16"/>
-        <state_interface name="CH17"/>
-        <state_interface name="CH18"/>
-        <state_interface name="iBUS Checksum Fails"/>
-        <state_interface name="iBUS Last Frame Age"/>
-        <state_interface name="iBUS Failsafe"/>
-        <state_interface name="iBUS RSSI (raw)"/>
-        <state_interface name="iBUS TX Failsafe"/>
+        <state_interface name="CRSF Frame Count"/>
+        <state_interface name="CRSF CRC Fails"/>
+        <state_interface name="CRSF Last Frame (ms)"/>
+        <state_interface name="CRSF Failsafe"/>
+        <state_interface name="CRSF RSSI"/>
+        <state_interface name="CRSF Link Quality"/>
+        <state_interface name="CRSF SNR"/>
       </gpio>
     </ros2_control>
   </xacro:macro>
