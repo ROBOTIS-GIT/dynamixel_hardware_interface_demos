@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <!-- OpenRB-150 ELRS (CRSF) — OPENRB_CRSF.xml / openrb_elrs.model (6031) -->
+  <xacro:macro name="dynamixel_system_ros2_control" params="name port_name baud_rate">
+    <ros2_control name="${name}" type="system">
+      <hardware>
+        <plugin>dynamixel_hardware_interface/DynamixelHardware</plugin>
+        <param name="port_name">${port_name}</param>
+        <param name="baud_rate">${baud_rate}</param>
+        <param name="dynamixel_model_folder">/param/dxl_model</param>
+        <param name="number_of_joints">0</param>
+        <param name="number_of_transmissions">0</param>
+        <param name="disable_torque_at_init">true</param>
+        <param name="error_timeout_ms">1000</param>
+        <param name="dynamixel_state_pub_msg_name">dynamixel_hardware_interface/dxl_state</param>
+        <param name="get_dynamixel_data_srv_name">dynamixel_hardware_interface/get_dxl_data</param>
+        <param name="set_dynamixel_data_srv_name">dynamixel_hardware_interface/set_dxl_data</param>
+        <param name="reboot_dxl_srv_name">dynamixel_hardware_interface/reboot_dxl</param>
+        <param name="set_dxl_torque_srv_name">dynamixel_hardware_interface/set_dxl_torque</param>
+      </hardware>
+
+      <sensor name="openrb_elrs">
+        <state_interface name="CH1"/>
+        <state_interface name="CH2"/>
+        <state_interface name="CH3"/>
+        <state_interface name="CH4"/>
+        <state_interface name="CH5"/>
+        <state_interface name="CH6"/>
+        <state_interface name="CH7"/>
+        <state_interface name="CH8"/>
+        <state_interface name="CH9"/>
+        <state_interface name="CH10"/>
+        <state_interface name="CH11"/>
+        <state_interface name="CH12"/>
+        <state_interface name="CH13"/>
+        <state_interface name="CH14"/>
+        <state_interface name="CH15"/>
+        <state_interface name="CH16"/>
+        <state_interface name="CRSF Frame Count"/>
+        <state_interface name="CRSF CRC Fails"/>
+        <state_interface name="CRSF Last Frame (ms)"/>
+        <state_interface name="CRSF Failsafe"/>
+        <state_interface name="CRSF RSSI"/>
+        <state_interface name="CRSF Link Quality"/>
+        <state_interface name="CRSF SNR"/>
+      </sensor>
+
+      <gpio name="openrb_elrs">
+        <param name="type">sensor</param>
+        <param name="ID">1</param>
+        <state_interface name="CH1"/>
+        <state_interface name="CH2"/>
+        <state_interface name="CH3"/>
+        <state_interface name="CH4"/>
+        <state_interface name="CH5"/>
+        <state_interface name="CH6"/>
+        <state_interface name="CH7"/>
+        <state_interface name="CH8"/>
+        <state_interface name="CH9"/>
+        <state_interface name="CH10"/>
+        <state_interface name="CH11"/>
+        <state_interface name="CH12"/>
+        <state_interface name="CH13"/>
+        <state_interface name="CH14"/>
+        <state_interface name="CH15"/>
+        <state_interface name="CH16"/>
+        <state_interface name="CRSF Frame Count"/>
+        <state_interface name="CRSF CRC Fails"/>
+        <state_interface name="CRSF Last Frame (ms)"/>
+        <state_interface name="CRSF Failsafe"/>
+        <state_interface name="CRSF RSSI"/>
+        <state_interface name="CRSF Link Quality"/>
+        <state_interface name="CRSF SNR"/>
+      </gpio>
+    </ros2_control>
+  </xacro:macro>
+</robot>

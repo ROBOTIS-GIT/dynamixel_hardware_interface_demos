@@ -3,8 +3,8 @@ services:
     container_name: dynamixel_hardware_interface_demos
     image: robotis/dynamixel-hardware-interface-demos:latest
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ..
+      dockerfile: docker/Dockerfile
     tty: true
     restart: always
     cap_add:
@@ -14,11 +14,15 @@ services:
       rttime: -1
       memlock: 8428281856
     network_mode: host
+    ipc: host
+    pid: host
     environment:
      - DISPLAY=${DISPLAY}
      - QT_X11_NO_MITSHM=1
+     # - RMW_IMPLEMENTATION=rmw_zenoh_cpp
     volumes:
       - /dev:/dev
+      - /dev/shm:/dev/shm
       - ./workspace:/workspace
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
       - /tmp/.docker.xauth:/tmp/.docker.xauth:rw

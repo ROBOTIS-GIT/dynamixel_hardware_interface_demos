@@ -1,0 +1,16 @@
+/**:
+  controller_manager:
+    ros__parameters:
+      update_rate: 500  # Hz
+
+      joint_state_broadcaster:
+        type: joint_state_broadcaster/JointStateBroadcaster
+
+      imu_sensor_broadcaster:
+        type: imu_sensor_broadcaster/IMUSensorBroadcaster
+
+/**:
+  imu_sensor_broadcaster:
+    ros__parameters:
+      sensor_name: "imu"
+      frame_id: imu_link

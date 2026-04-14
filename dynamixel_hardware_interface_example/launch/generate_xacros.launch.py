@@ -42,7 +42,7 @@ def generate_launch_description():
             description='Directory to save generated xacro files.'
         ),
         DeclareLaunchArgument(
-            'baudrate',
+            'baud_rate',
             default_value='4000000',
             description='Baudrate for the Dynamixel port.'
         ),
@@ -60,7 +60,7 @@ def generate_launch_description():
 
     num_joints = LaunchConfiguration('num_joints')
     output_dir = LaunchConfiguration('output_dir')
-    baudrate = LaunchConfiguration('baudrate')
+    baud_rate = LaunchConfiguration('baud_rate')
     port_name = LaunchConfiguration('port_name')
     command_interface = LaunchConfiguration('command_interface')
 
@@ -69,7 +69,7 @@ def generate_launch_description():
         executable='generate_xacros',
         name='generate_xacros',
         output='screen',
-        arguments=[num_joints, output_dir, baudrate, port_name, command_interface],
+        arguments=[num_joints, output_dir, baud_rate, port_name, command_interface],
     )
 
     return LaunchDescription(declared_arguments + [generate_xacros_node])

@@ -22,7 +22,7 @@ import sys
 
 
 # Generate the .ros2_control.xacro file
-def generate_ros2_control_xacro(num_joints, filename, baudrate, port_name, command_interface):
+def generate_ros2_control_xacro(num_joints, filename, baud_rate, port_name, command_interface):
     # Determine the appropriate interface names based on command_interface
     if command_interface == 'position':
         joint_command_interface = 'position'
@@ -101,13 +101,13 @@ def generate_ros2_control_xacro(num_joints, filename, baudrate, port_name, comma
 
 
 # Generate the .urdf.xacro file
-def generate_urdf_xacro(num_joints, filename, baudrate, port_name):
+def generate_urdf_xacro(num_joints, filename, baud_rate, port_name):
     with open(filename, 'w') as f:
         f.write('<?xml version="1.0"?>\n')
         f.write('<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="dynamixel_system">\n')
         f.write('  <xacro:arg name="prefix" default="" />\n')
         # Provide xacro args for baud_rate and port_name with defaults from CLI
-        f.write(f'  <xacro:arg name="baud_rate" default="{baudrate}" />\n')
+        f.write(f'  <xacro:arg name="baud_rate" default="{baud_rate}" />\n')
         f.write(f'  <xacro:arg name="port_name" default="{port_name}" />\n')
         f.write('  <xacro:include filename="dynamixel_system.ros2_control.xacro" />\n')
         f.write('\n')
@@ -134,7 +134,7 @@ def generate_urdf_xacro(num_joints, filename, baudrate, port_name):
 def main():
     if len(sys.argv) < 2:
         print('Usage: python generate_dynamixel_xacros.py <number_of_joints> '
-              '[output_dir] [baudrate] [port_name] [command_interface]')
+              '[output_dir] [baud_rate] [port_name] [command_interface]')
         sys.exit(1)
     try:
         num_joints = int(sys.argv[1])
@@ -142,13 +142,13 @@ def main():
         print('First argument must be an integer (number of joints)')
         sys.exit(1)
     config_dir = os.path.join(os.path.dirname(__file__), 'config')
-    baudrate = '4000000'
+    baud_rate = '4000000'
     port_name = '/dev/ttyUSB0'
     command_interface = 'position'  # Default value
     if len(sys.argv) >= 3:
         config_dir = sys.argv[2]
     if len(sys.argv) >= 4:
-        baudrate = sys.argv[3]
+        baud_rate = sys.argv[3]
     if len(sys.argv) >= 5:
         port_name = sys.argv[4]
     if len(sys.argv) >= 6:
@@ -156,11 +156,11 @@ def main():
     os.makedirs(config_dir, exist_ok=True)
     ros2_control_path = os.path.join(config_dir, 'dynamixel_system.ros2_control.xacro')
     urdf_xacro_path = os.path.join(config_dir, 'dynamixel_system.urdf.xacro')
-    generate_ros2_control_xacro(num_joints, ros2_control_path, baudrate,
+    generate_ros2_control_xacro(num_joints, ros2_control_path, baud_rate,
                                 port_name, command_interface)
-    generate_urdf_xacro(num_joints, urdf_xacro_path, baudrate, port_name)
+    generate_urdf_xacro(num_joints, urdf_xacro_path, baud_rate, port_name)
     print(f'Generated xacro files for {num_joints} joints in {config_dir}. '
-          f'Baudrate: {baudrate}, Port: {port_name}, Command Interface: {command_interface}')
+          f'baud_rate: {baud_rate}, Port: {port_name}, Command Interface: {command_interface}')
 
 
 if __name__ == '__main__':

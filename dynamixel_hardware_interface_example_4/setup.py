@@ -4,7 +4,7 @@ import os
 from setuptools import find_packages
 from setuptools import setup
 
-package_name = 'dynamixel_hardware_interface_example_1'
+package_name = 'dynamixel_hardware_interface_example_4'
 
 setup(
     name=package_name,
@@ -24,6 +24,8 @@ setup(
     license='Apache 2.0',
     tests_require=['pytest'],
     entry_points={
-        'console_scripts': [],
+        'console_scripts': [
+            'trigger_to_gripper_remap_node = dynamixel_hardware_interface_example_4.trigger_to_gripper_remap_node:main',
+        ],
     },
 )

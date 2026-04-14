@@ -35,11 +35,11 @@ You can generate custom XACRO files for your robot using the provided script and
 ```bash
 ros2 launch dynamixel_hardware_interface_example generate_xacros.launch.py \
   num_joints:=4 \
-  baudrate:=4000000 \
+  baud_rate:=4000000 \
   port_name:=/dev/ttyUSB0
 ```
 - `num_joints`: Number of joints/motors in your robot
-- `baudrate`: Baudrate for the Dynamixel port
+- `baud_rate`: Baudrate for the Dynamixel port
 - `port_name`: Serial port for the Dynamixel device
 
 This will generate new XACRO files in the `config/` directory.
@@ -48,7 +48,9 @@ This will generate new XACRO files in the `config/` directory.
 After generating the XACRO files, launch the hardware interface and controller manager:
 
 ```bash
-ros2 launch dynamixel_hardware_interface_example hardware.launch.py
+ros2 launch dynamixel_hardware_interface_example hardware.launch.py \
+  baud_rate:=4000000 \
+  port_name:=/dev/ttyUSB0
 ```
 
 ## Configuration Files

@@ -1,6 +1,6 @@
 # dynamixel_hardware_interface_demos
 
-This repository collects example packages and resources for working with Dynamixel hardware using the ros2_control framework. 
+This repository collects example packages and resources for working with Dynamixel hardware using the ros2_control framework.
 
 ## Overview
 This repository is intended to help users get started with Dynamixel hardware integration in ROS 2. It provides example configurations, launch files, and scripts to demonstrate how to use the `dynamixel_hardware_interface` with ros2_control and controller_manager.
@@ -11,6 +11,8 @@ This repository is intended to help users get started with Dynamixel hardware in
   - Example package with configuration files, launch files, and scripts for setting up and running a Dynamixel-based robot system using ros2_control.
 - [dynamixel_hardware_interface_example_1](dynamixel_hardware_interface_example_1/README.md)
   - Example package demonstrating a dual Dynamixel system (two buses) with separate ros2_control configurations and a dedicated launch file for running both systems together.
+- [dynamixel_hardware_interface_example_2](dynamixel_hardware_interface_example_2/README.md)
+  - Example package demonstrating a system with an Dynamixel Protocol compatible IMU sensor using the dynamixel_hardware_interface.
 
 ## Getting Started
 
