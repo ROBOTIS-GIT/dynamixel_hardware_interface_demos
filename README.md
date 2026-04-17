@@ -13,6 +13,8 @@ This repository is intended to help users get started with Dynamixel hardware in
   - Example package demonstrating a dual Dynamixel system (two buses) with separate ros2_control configurations and a dedicated launch file for running both systems together.
 - [dynamixel_hardware_interface_example_2](dynamixel_hardware_interface_example_2/README.md)
   - Example package demonstrating a system with an Dynamixel Protocol compatible IMU sensor using the dynamixel_hardware_interface.
+- [dynamixel_hardware_interface_example_5](dynamixel_hardware_interface_example_5/README.md)
+  - Example package demonstrating a TurtleBot3 OpenCR-based ros2_control system (dynamixel_tb3_system) that drives both wheel Dynamixels and reads the OpenCR on-board IMU and battery voltage through a custom Dynamixel-protocol firmware.
 
 ## Getting Started
 

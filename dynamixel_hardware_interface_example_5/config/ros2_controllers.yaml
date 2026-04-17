@@ -1,0 +1,65 @@
+/**:
+  controller_manager:
+    ros__parameters:
+      # OpenCR @ 1 Mbps + 11-item IMU/battery bulk read + 2 wheel sync
+      # write/read fits comfortably at 30 Hz when the hardware runs in
+      # synchronous mode (is_async=false in the xacro). Raise carefully if
+      # your bus or firmware can keep up.
+      update_rate: 30  # Hz
+
+      joint_state_broadcaster:
+        type: joint_state_broadcaster/JointStateBroadcaster
+
+      imu_sensor_broadcaster:
+        type: imu_sensor_broadcaster/IMUSensorBroadcaster
+
+      diff_drive_controller:
+        type: diff_drive_controller/DiffDriveController
+
+/**:
+  imu_sensor_broadcaster:
+    ros__parameters:
+      sensor_name: imu
+      frame_id: imu_link
+
+  diff_drive_controller:
+    ros__parameters:
+      left_wheel_names: [wheel_left_joint]
+      right_wheel_names: [wheel_right_joint]
+
+      # TurtleBot3 Burger
+      wheel_separation: 0.160
+      wheel_radius: 0.033
+
+      wheel_separation_multiplier: 1.0
+      left_wheel_radius_multiplier: 1.0
+      right_wheel_radius_multiplier: 1.0
+
+      publish_rate: 50.0
+      odom_frame_id: odom
+      base_frame_id: base_footprint
+      pose_covariance_diagonal: [0.001, 0.001, 0.001, 0.001, 0.001, 0.01]
+      twist_covariance_diagonal: [0.001, 0.001, 0.001, 0.001, 0.001, 0.01]
+
+      open_loop: false
+      enable_odom_tf: true
+
+      cmd_vel_timeout: 0.5
+      use_stamped_vel: false
+
+      linear:
+        x:
+          has_velocity_limits: true
+          has_acceleration_limits: true
+          max_velocity: 0.22
+          min_velocity: -0.22
+          max_acceleration: 1.0
+          min_acceleration: -1.0
+      angular:
+        z:
+          has_velocity_limits: true
+          has_acceleration_limits: true
+          max_velocity: 2.84
+          min_velocity: -2.84
+          max_acceleration: 3.2
+          min_acceleration: -3.2

@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="dynamixel_tb3_system">
+  <xacro:arg name="prefix" default="" />
+  <xacro:arg name="port_name" default="/dev/ttyACM0" />
+  <xacro:arg name="baud_rate" default="1000000" />
+  <xacro:arg name="left_wheel_joint_name" default="wheel_left_joint" />
+  <xacro:arg name="right_wheel_joint_name" default="wheel_right_joint" />
+  <xacro:arg name="left_wheel_id" default="1" />
+  <xacro:arg name="right_wheel_id" default="2" />
+  <xacro:arg name="opencr_id" default="100" />
+
+  <xacro:include filename="dynamixel_tb3_system.ros2_control.xacro" />
+
+  <xacro:dynamixel_tb3_system_ros2_control
+      name="dynamixel_tb3_system"
+      port_name="$(arg port_name)"
+      baud_rate="$(arg baud_rate)"
+      left_wheel_joint_name="$(arg prefix)$(arg left_wheel_joint_name)"
+      right_wheel_joint_name="$(arg prefix)$(arg right_wheel_joint_name)"
+      left_wheel_id="$(arg left_wheel_id)"
+      right_wheel_id="$(arg right_wheel_id)"
+      opencr_id="$(arg opencr_id)"/>
+
+  <!--
+    Minimal kinematic skeleton.
+    Frames: base_footprint -> base_link -> {wheel_left_link, wheel_right_link}
+    The wheel separation/radius below match the TurtleBot3 Burger.
+    They are only used for diff_drive_controller via the controller config; the
+    URDF here exists so robot_state_publisher can publish wheel TFs.
+  -->
+  <xacro:property name="wheel_separation" value="0.160"/>
+  <xacro:property name="wheel_radius" value="0.033"/>
+
+  <link name="$(arg prefix)base_footprint"/>
+  <link name="$(arg prefix)base_link"/>
+
+  <joint name="$(arg prefix)base_joint" type="fixed">
+    <parent link="$(arg prefix)base_footprint"/>
+    <child link="$(arg prefix)base_link"/>
+    <origin xyz="0 0 ${wheel_radius}" rpy="0 0 0"/>
+  </joint>
+
+  <link name="$(arg prefix)wheel_left_link"/>
+  <joint name="$(arg prefix)$(arg left_wheel_joint_name)" type="continuous">
+    <parent link="$(arg prefix)base_link"/>
+    <child link="$(arg prefix)wheel_left_link"/>
+    <origin xyz="0 ${wheel_separation/2} 0" rpy="-1.5708 0 0"/>
+    <axis xyz="0 0 1"/>
+  </joint>
+
+  <link name="$(arg prefix)wheel_right_link"/>
+  <joint name="$(arg prefix)$(arg right_wheel_joint_name)" type="continuous">
+    <parent link="$(arg prefix)base_link"/>
+    <child link="$(arg prefix)wheel_right_link"/>
+    <origin xyz="0 -${wheel_separation/2} 0" rpy="-1.5708 0 0"/>
+    <axis xyz="0 0 1"/>
+  </joint>
+
+  <link name="$(arg prefix)imu_link"/>
+  <joint name="$(arg prefix)imu_joint" type="fixed">
+    <parent link="$(arg prefix)base_link"/>
+    <child link="$(arg prefix)imu_link"/>
+    <origin xyz="0 0 0.068" rpy="0 0 0"/>
+  </joint>
+</robot>

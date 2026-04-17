@@ -1,0 +1,148 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!--
+    Single ros2_control "system" for a TurtleBot3 with a custom OpenCR firmware
+    (model file: opencr_tb3.model, ModelNumber=6040) that exposes the on-board
+    IMU and battery voltage as a Dynamixel-protocol device on the same bus as
+    the two wheel Dynamixels.
+
+    Bus layout (by default):
+      - ID  1  : left wheel Dynamixel  (X-series, velocity mode)
+      - ID  2  : right wheel Dynamixel (X-series, velocity mode)
+      - ID 100 : OpenCR (sensor-type Dynamixel emulation)
+                 - IMU: orientation.{w,x,y,z}, angular_velocity.{x,y,z},
+                        linear_acceleration.{x,y,z}
+                 - Battery Voltage (mV)
+
+    The IMU item names match the standard imu_sensor_broadcaster expectations
+    so the broadcaster can be used as-is.
+  -->
+  <xacro:macro name="dynamixel_tb3_system_ros2_control"
+               params="name port_name baud_rate
+                       left_wheel_joint_name right_wheel_joint_name
+                       left_wheel_id right_wheel_id opencr_id">
+    <!--
+      is_async=false keeps read/write serialized inside controller_manager so
+      the OpenCR's shared serial bus does not pile up overlapping triggers and
+      so the get_dxl_data service can interleave with the read/write cycle.
+      With OpenCR @ 1 Mbps + 2 wheels + 11-item IMU/battery bulk read, ~30 Hz
+      is the comfortable upper bound; raise update_rate gradually if your
+      bus / firmware is faster.
+    -->
+    <ros2_control name="${name}" type="system" is_async="false">
+      <hardware>
+        <plugin>dynamixel_hardware_interface/DynamixelHardware</plugin>
+        <param name="port_name">${port_name}</param>
+        <param name="baud_rate">${baud_rate}</param>
+        <param name="dynamixel_model_folder">/param/dxl_model</param>
+        <param name="number_of_joints">2</param>
+        <param name="number_of_transmissions">2</param>
+        <param name="disable_torque_at_init">true</param>
+        <param name="error_timeout_ms">1000</param>
+        <param name="dynamixel_state_pub_msg_name">dynamixel_hardware_interface/dxl_state</param>
+        <param name="get_dynamixel_data_srv_name">dynamixel_hardware_interface/get_dxl_data</param>
+        <param name="set_dynamixel_data_srv_name">dynamixel_hardware_interface/set_dxl_data</param>
+        <param name="reboot_dxl_srv_name">dynamixel_hardware_interface/reboot_dxl</param>
+        <param name="set_dxl_torque_srv_name">dynamixel_hardware_interface/set_dxl_torque</param>
+      </hardware>
+
+      <!-- Wheel joints exposed to the controller layer (velocity command) -->
+      <joint name="${left_wheel_joint_name}">
+        <command_interface name="velocity"/>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+        <state_interface name="effort"/>
+      </joint>
+
+      <joint name="${right_wheel_joint_name}">
+        <command_interface name="velocity"/>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+        <state_interface name="effort"/>
+      </joint>
+
+      <!-- IMU sensor: consumed by imu_sensor_broadcaster -->
+      <sensor name="imu">
+        <state_interface name="linear_acceleration.x"/>
+        <state_interface name="linear_acceleration.y"/>
+        <state_interface name="linear_acceleration.z"/>
+        <state_interface name="angular_velocity.x"/>
+        <state_interface name="angular_velocity.y"/>
+        <state_interface name="angular_velocity.z"/>
+        <state_interface name="orientation.w"/>
+        <state_interface name="orientation.x"/>
+        <state_interface name="orientation.y"/>
+        <state_interface name="orientation.z"/>
+      </sensor>
+
+      <!-- Left wheel Dynamixel (X-series, velocity mode = 1) -->
+      <gpio name="dxl_left_wheel">
+        <param name="type">dxl</param>
+        <param name="ID">${left_wheel_id}</param>
+        <command_interface name="Goal Velocity"/>
+        <state_interface name="Present Position"/>
+        <state_interface name="Present Velocity"/>
+        <state_interface name="Present Current"/>
+        <state_interface name="Hardware Error Status"/>
+        <param name="Operating Mode">1</param>
+        <param name="Return Delay Time">0</param>
+        <param name="Profile Acceleration">0</param>
+        <param name="Profile Velocity">0</param>
+      </gpio>
+
+      <!-- Right wheel Dynamixel (X-series, velocity mode = 1) -->
+      <gpio name="dxl_right_wheel">
+        <param name="type">dxl</param>
+        <param name="ID">${right_wheel_id}</param>
+        <command_interface name="Goal Velocity"/>
+        <state_interface name="Present Position"/>
+        <state_interface name="Present Velocity"/>
+        <state_interface name="Present Current"/>
+        <state_interface name="Hardware Error Status"/>
+        <param name="Operating Mode">1</param>
+        <param name="Return Delay Time">0</param>
+        <param name="Profile Acceleration">0</param>
+        <param name="Profile Velocity">0</param>
+      </gpio>
+
+      <!--
+        OpenCR sensor-type device.
+        State interface names match opencr_tb3.model entries exactly.
+
+        IMPORTANT: this gpio block's name MUST match the <sensor> block name
+        ("imu") so that the hardware-exported names (gpio_name/<iface>)
+        overlap the URDF-declared names from the sensor block. Otherwise the
+        resource manager reports "missing state interfaces" because URDF and
+        plugin disagree on the prefix.
+
+        Battery Voltage is read on the same bus device (ID = opencr_id) and
+        therefore lives in this same gpio block; it gets exported as
+        "imu/Battery Voltage (mV)" but is consumed only by the
+        opencr_battery_publisher node via the get_dxl_data service, so the
+        prefix does not matter to clients.
+      -->
+      <gpio name="imu">
+        <param name="type">sensor</param>
+        <param name="ID">${opencr_id}</param>
+
+        <!-- IMU: standard imu_sensor_broadcaster names -->
+        <state_interface name="orientation.w"/>
+        <state_interface name="orientation.x"/>
+        <state_interface name="orientation.y"/>
+        <state_interface name="orientation.z"/>
+        <state_interface name="angular_velocity.x"/>
+        <state_interface name="angular_velocity.y"/>
+        <state_interface name="angular_velocity.z"/>
+        <state_interface name="linear_acceleration.x"/>
+        <state_interface name="linear_acceleration.y"/>
+        <state_interface name="linear_acceleration.z"/>
+
+        <!-- Battery (uint16, mV; scaled to V by the .model file) -->
+        <!-- <state_interface name="Battery Voltage (mV)"/> -->
+
+        <param name="Return Delay Time">0</param>
+      </gpio>
+    </ros2_control>
+  </xacro:macro>
+</robot>
