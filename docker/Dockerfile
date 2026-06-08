@@ -9,10 +9,11 @@ WORKDIR ${COLCON_WS}
 RUN mkdir -p ${COLCON_WS}/src && \
     cd ${COLCON_WS}/src && \
     git clone -b jazzy https://github.com/ROBOTIS-GIT/dynamixel_hardware_interface.git && \
-    git clone -b jazzy https://github.com/ROBOTIS-GIT/dynamixel_interfaces.git && \
-    git clone -b jazzy https://github.com/ROBOTIS-GIT/DynamixelSDK.git
+    git clone -b jazzy https://github.com/ROBOTIS-GIT/dynamixel_interfaces.git
 
+COPY libs/DynamixelSDK ${COLCON_WS}/src/DynamixelSDK
 COPY . ${COLCON_WS}/src/dynamixel_hardware_interface_demos
+RUN rm -rf ${COLCON_WS}/src/dynamixel_hardware_interface_demos/libs
 
 RUN cd ${COLCON_WS} && \
     apt-get update && \

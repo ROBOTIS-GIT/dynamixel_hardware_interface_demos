@@ -1,0 +1,4 @@
+[submodule "libs/DynamixelSDK"]
+	path = libs/DynamixelSDK
+	url = git@github.com:ROBOTIS-GIT/dxl_sdk_internal.git
+	branch = feature-e2d2-udp-config-service

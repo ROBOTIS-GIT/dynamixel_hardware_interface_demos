@@ -26,6 +26,13 @@ services:
       - ./workspace:/workspace
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
       - /tmp/.docker.xauth:/tmp/.docker.xauth:rw
-      - ../:/root/ros2_ws/src/dynamixel_hardware_interface_demos/
+      - ../libs/DynamixelSDK:/root/ros2_ws/src/DynamixelSDK
+      - ../dynamixel_hardware_interface_demos:/root/ros2_ws/src/dynamixel_hardware_interface_demos/dynamixel_hardware_interface_demos
+      - ../dynamixel_hardware_interface_example:/root/ros2_ws/src/dynamixel_hardware_interface_demos/dynamixel_hardware_interface_example
+      - ../dynamixel_hardware_interface_example_1:/root/ros2_ws/src/dynamixel_hardware_interface_demos/dynamixel_hardware_interface_example_1
+      - ../dynamixel_hardware_interface_example_2:/root/ros2_ws/src/dynamixel_hardware_interface_demos/dynamixel_hardware_interface_example_2
+      - ../dynamixel_hardware_interface_example_3:/root/ros2_ws/src/dynamixel_hardware_interface_demos/dynamixel_hardware_interface_example_3
+      - ../dynamixel_hardware_interface_example_4:/root/ros2_ws/src/dynamixel_hardware_interface_demos/dynamixel_hardware_interface_example_4
+      - ../dynamixel_hardware_interface_example_e2d2:/root/ros2_ws/src/dynamixel_hardware_interface_demos/dynamixel_hardware_interface_example_e2d2
     privileged: true
     command: bash

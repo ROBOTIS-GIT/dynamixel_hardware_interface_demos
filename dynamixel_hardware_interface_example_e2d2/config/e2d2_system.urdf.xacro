@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="e2d2_system">
+  <xacro:arg name="prefix" default="" />
+  <xacro:arg name="enable_bridge" default="true" />
+  <xacro:arg name="enable_comm_test" default="false" />
+  <xacro:arg name="bridge_port_name" default="e2d2tcp:192.168.0.1:5001" />
+  <xacro:arg name="comm_port_name_1" default="e2d2udp:192.168.0.1:5001" />
+  <xacro:arg name="comm_port_name_2" default="e2d2udp:192.168.0.1:5002" />
+  <xacro:arg name="comm_port_name_3" default="e2d2udp:192.168.0.1:5003" />
+  <xacro:arg name="comm_port_name_4" default="e2d2udp:192.168.0.1:5004" />
+  <xacro:arg name="comm_port_name_5" default="e2d2udp:192.168.0.1:5005" />
+  <xacro:arg name="baud_rate" default="6000000" />
+  <xacro:arg name="dxl_id" default="1" />
+  <xacro:arg name="dxl_id_1" default="1" />
+  <xacro:arg name="dxl_id_2" default="1" />
+  <xacro:arg name="dxl_id_3" default="1" />
+  <xacro:arg name="dxl_id_4" default="1" />
+  <xacro:arg name="dxl_id_5" default="1" />
+
+  <xacro:include filename="e2d2_system.ros2_control.xacro" />
+
+  <xacro:if value="$(arg enable_bridge)">
+    <xacro:e2d2_bridge_ros2_control
+      name="e2d2_bridge"
+      joint_name="$(arg prefix)joint1"
+      port_name="$(arg bridge_port_name)"
+      baud_rate="$(arg baud_rate)"
+      dxl_id="$(arg dxl_id)" />
+  </xacro:if>
+
+  <xacro:if value="$(arg enable_comm_test)">
+    <xacro:e2d2_bridge_comm_test_ros2_control
+      name="e2d2_bridge_comm_ch1"
+      port_name="$(arg comm_port_name_1)"
+      baud_rate="$(arg baud_rate)"
+      dxl_id="$(arg dxl_id_1)" />
+    <xacro:e2d2_bridge_comm_test_ros2_control
+      name="e2d2_bridge_comm_ch2"
+      port_name="$(arg comm_port_name_2)"
+      baud_rate="$(arg baud_rate)"
+      dxl_id="$(arg dxl_id_2)" />
+    <xacro:e2d2_bridge_comm_test_ros2_control
+      name="e2d2_bridge_comm_ch3"
+      port_name="$(arg comm_port_name_3)"
+      baud_rate="$(arg baud_rate)"
+      dxl_id="$(arg dxl_id_3)" />
+    <xacro:e2d2_bridge_comm_test_ros2_control
+      name="e2d2_bridge_comm_ch4"
+      port_name="$(arg comm_port_name_4)"
+      baud_rate="$(arg baud_rate)"
+      dxl_id="$(arg dxl_id_4)" />
+    <xacro:e2d2_bridge_comm_test_ros2_control
+      name="e2d2_bridge_comm_ch5"
+      port_name="$(arg comm_port_name_5)"
+      baud_rate="$(arg baud_rate)"
+      dxl_id="$(arg dxl_id_5)" />
+  </xacro:if>
+
+  <link name="$(arg prefix)base_link"/>
+
+  <xacro:if value="$(arg enable_bridge)">
+    <joint name="$(arg prefix)joint1" type="revolute">
+      <parent link="$(arg prefix)base_link"/>
+      <child link="$(arg prefix)link1"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <axis xyz="1 0 0" />
+      <limit velocity="4.8" effort="1" lower="${-pi * 100.0}" upper="${pi * 100.0}" />
+    </joint>
+    <link name="$(arg prefix)link1"/>
+  </xacro:if>
+</robot>
